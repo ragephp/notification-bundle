@@ -1,0 +1,2 @@
+parameters:
+    rage_notification.email_message.class: RageNotificationBundle\Message\Email

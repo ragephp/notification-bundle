@@ -1,0 +1,17 @@
+{
+    "name": "ragephp/notification-bundle",
+    "keywords": ["swiftmailer", "email", "symfony2"],
+    "description": "",
+    "homepage": "https://github.com/ragephp/notification-bundle",
+    "license": "GNU LGPL",
+    "require" : {
+        "php": ">=5.4.0",
+        "symfony/framework-bundle": "~2.6",
+        "symfony/swiftmailer-bundle": "~2.3"
+    },
+    "autoload" : {
+        "psr-4": {
+            "RageNotificationBundle\\": "src/"
+        }
+    }
+}
