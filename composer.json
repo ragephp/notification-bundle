@@ -1,7 +1,7 @@
 {
     "name": "ragephp/notification-bundle",
     "keywords": ["swiftmailer", "email", "symfony2"],
-    "description": "",
+    "description": "Simple email notifications bundle for Symfony2.",
     "homepage": "https://github.com/ragephp/notification-bundle",
     "license": "GNU LGPL",
     "require" : {
