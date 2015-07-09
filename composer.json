@@ -4,14 +4,14 @@
     "description": "Simple email notifications bundle for Symfony2.",
     "homepage": "https://github.com/ragephp/notification-bundle",
     "license": "GNU LGPL",
-    "require" : {
+    "require": {
         "php": ">=5.4.0",
         "symfony/framework-bundle": "~2.6",
         "symfony/swiftmailer-bundle": "~2.3"
     },
-    "autoload" : {
+    "autoload": {
         "psr-4": {
-            "RageNotificationBundle\\": "src/"
+            "RageNotificationBundle\\": ""
         }
     }
 }
