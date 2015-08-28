@@ -92,7 +92,7 @@ class Email
     {
         $renderedHtml = $this->getRenderedHtmlMessage();
         if (!empty($this->embedImages['urlPrefix'])) {
-            $regexp = '#[\'"](' . preg_quote($this->embedImages['urlPrefix']) . '(.+\.(gif|png|jpg|jpeg)?))[\'"]#ium';
+            $regexp = '#[\'"](' . preg_quote($this->embedImages['urlPrefix']) . '([^\'"]+\.(gif|png|jpg|jpeg)?))[\'"]#ium';
             preg_match_all($regexp, $renderedHtml, $matches, PREG_SET_ORDER);
             foreach ($matches as $match) {
                 $embed = $message->embed(Swift_Image::fromPath($this->embedImages['path'] . $match[2]));
