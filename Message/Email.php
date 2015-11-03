@@ -1,7 +1,6 @@
 <?php
 namespace RageNotificationBundle\Message;
 
-use GdePosylkaBundle\Twig\Koneko;
 use Swift_Image;
 use Swift_Message;
 use Symfony\Bridge\Twig\TwigEngine;
@@ -58,7 +57,7 @@ class Email
     {
         if (empty($this->subject)) {
             $template = $this->templatePath . '/' . $this->templateId . '/subject.txt.twig';
-            $this->subject = $this->twigEngine->render($template, $this->templateVars);
+            $this->subject = $this->render($template, $this->templateVars);
         }
         return $this->subject;
     }
@@ -67,7 +66,7 @@ class Email
     {
         if (empty($this->txtMessage)) {
             $template = $this->templatePath . '/' . $this->templateId . '/email.txt.twig';
-            $this->txtMessage = $this->twigEngine->render($template, $this->templateVars);
+            $this->txtMessage = $this->render($template, $this->templateVars);
         }
         return $this->txtMessage;
     }
@@ -78,11 +77,11 @@ class Email
             $template = $this->templatePath . '/' . $this->templateId . '/email.html.twig';
             if (!empty($this->cssFile)) {
                 $cssToInlineStyles = new CssToInlineStyles();
-                $cssToInlineStyles->setHTML($this->twigEngine->render($template, $this->templateVars));
+                $cssToInlineStyles->setHTML($this->render($template, $this->templateVars));
                 $cssToInlineStyles->setCSS(file_get_contents($this->cssFile));
                 $this->htmlMessage = $cssToInlineStyles->convert();
             } else {
-                $this->htmlMessage = $this->twigEngine->render($template, $this->templateVars);
+                $this->htmlMessage = $this->render($template, $this->templateVars);
             }
         }
         return $this->htmlMessage;
@@ -100,6 +99,12 @@ class Email
             }
         }
         return $renderedHtml;
+    }
+
+    protected function render($template, $vars)
+    {
+        $vars['utm_params'] = 'utm_source=email&utm_medium=transaction&utm_campaign=' . $this->templateId;
+        return $this->twigEngine->render($template, $vars);
     }
 
     /**
@@ -131,7 +136,6 @@ class Email
         $this->replyTo = $replyTo;
         return $this;
     }
-
 
     /**
      * @param $id

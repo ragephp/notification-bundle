@@ -5,9 +5,10 @@
     "homepage": "https://github.com/ragephp/notification-bundle",
     "license": "GNU LGPL",
     "require": {
-        "php": ">=5.4.0",
-        "symfony/framework-bundle": "~2.6",
-        "symfony/swiftmailer-bundle": "~2.3"
+        "php": ">=5.5.0",
+        "symfony/symfony": "~2.7",
+        "symfony/swiftmailer-bundle": "~2.3",
+        "tijsverkoyen/css-to-inline-styles": "1.5.4"
     },
     "autoload": {
         "psr-4": {
