@@ -23,7 +23,6 @@ class RageNotificationExtension extends Extension
         foreach ($config['email'] as $alias => $options) {
             $optionId = sprintf('rage_notification.email.%s.message', $alias);
             $optionDef = new Definition($container->getParameter('rage_notification.email_message.class'));
-            $optionDef->setScope(ContainerInterface::SCOPE_PROTOTYPE);
             $optionDef->addArgument(new Reference('mailer'));
             $optionDef->addArgument(new Reference('templating'));
             if (!empty($options['from'])) {
