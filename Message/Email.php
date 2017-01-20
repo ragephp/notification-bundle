@@ -90,7 +90,6 @@ class Email
 
     /**
      * @return string
-     * @throws \TijsVerkoyen\CssToInlineStyles\Exception
      */
     public function getRenderedHtmlMessage()
     {
@@ -98,9 +97,7 @@ class Email
             $template = $this->templatePath.'/'.$this->templateId.'/email.html.twig';
             if (!empty($this->cssFile)) {
                 $cssToInlineStyles = new CssToInlineStyles();
-                $cssToInlineStyles->setHTML($this->render($template, $this->templateVars));
-                $cssToInlineStyles->setCSS(file_get_contents($this->cssFile));
-                $this->htmlMessage = $cssToInlineStyles->convert();
+                $this->htmlMessage = $cssToInlineStyles->convert($this->render($template, $this->templateVars), file_get_contents($this->cssFile));
             } else {
                 $this->htmlMessage = $this->render($template, $this->templateVars);
             }
