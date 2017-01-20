@@ -6,9 +6,9 @@
     "license": "GNU LGPL",
     "require": {
         "php": ">=5.5.0",
-        "symfony/symfony": "~2.7",
+        "symfony/symfony": "3.1.*",
         "symfony/swiftmailer-bundle": "~2.3",
-        "tijsverkoyen/css-to-inline-styles": "1.5.4"
+        "tijsverkoyen/css-to-inline-styles": "2.2.*"
     },
     "autoload": {
         "psr-4": {

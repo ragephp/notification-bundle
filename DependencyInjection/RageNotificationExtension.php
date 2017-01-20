@@ -9,8 +9,15 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\Config\FileLocator;
 
+/**
+ * Class RageNotificationExtension
+ */
 class RageNotificationExtension extends Extension
 {
+    /**
+     * @param array            $configs
+     * @param ContainerBuilder $container
+     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $loader = new YamlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
@@ -48,6 +55,9 @@ class RageNotificationExtension extends Extension
         }
     }
 
+    /**
+     * @return string
+     */
     public function getAlias()
     {
         return 'rage_notification';
