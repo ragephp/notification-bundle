@@ -158,9 +158,7 @@ class Message
     protected function inlineCSS($body)
     {
         $cssToInlineStyles = new CssToInlineStyles();
-        $cssToInlineStyles->setHTML($body);
-        $cssToInlineStyles->setCSS(file_get_contents($this->getConfig()->getCssFile()));
-        $content = $cssToInlineStyles->convert();
+        $content = $cssToInlineStyles->convert($body, file_get_contents($this->getConfig()->getCssFile()));
         $content = preg_replace_callback('#\%7B\%7B\%20(.+?)\%20\%7D\%7D#', function ($match) {
             return urldecode($match[0]);
         }, $content);
