@@ -1,0 +1,6 @@
+parameters:
+    rage_email.sender.class: RagePHP\RageEmailBundle\Message\Sender
+    rage_email.config.class: RagePHP\RageEmailBundle\Message\Config
+    rage_email.message.class: RagePHP\RageEmailBundle\Message\Message
+    rage_email.locale_listener.class: RagePHP\RageEmailBundle\EventListener\EmailListener
+    swiftmailer.transport.smtp.class: RagePHP\RageEmailBundle\Swift\SmtpTransport
