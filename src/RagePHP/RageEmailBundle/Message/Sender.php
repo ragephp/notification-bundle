@@ -46,9 +46,14 @@ class Sender
         /** @var SmtpTransport $transport */
         $transport = $mailer->getTransport();
         try {
-            $server = $transport->getHost();
             $mailer->send($message->getSwiftMessage());
-            $eximId = $transport->getLastEximId();
+            if ($transport instanceof SmtpTransport) {
+                $server = $transport->getHost();
+                $eximId = $transport->getLastEximId();
+            } else {
+                $server = null;
+                $eximId = null;
+            }
             $this->eventDispatcher->dispatch(RageEmailEvent::AFTER_SEND, new SendEvent($message, $server, $eximId));
         } catch (Swift_TransportException $exception) {
             $transport->stop();
