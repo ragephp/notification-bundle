@@ -1,0 +1,30 @@
+rage_email:
+    message:
+        default:
+            domain: "%router.request_context.host%"
+            template_path: GdePosylkaBundle::Email
+            css_file: "%kernel.root_dir%/../web/css/email.css"
+            domain: "%router.request_context.host%"
+            from: "%mailer_from%"
+            reply_to: "%mailer_replyto%"
+        user:
+            domain: "%router.request_context.host%"
+            template_path: GpUserBundle::Email
+            css_file: "%kernel.root_dir%/../web/css/email.css"
+            domain: "%router.request_context.host%"
+            from: "%mailer_from%"
+            reply_to: "%mailer_replyto%"
+#            embed_images:
+#                url: "http://gdeposylka.ru/img/" # website root
+#                path: "%kernel.root_dir%/../web/img/" # real path
+    sender:
+        default:
+            mailer: swiftmailer.mailer.primary
+            mailer_fallback: swiftmailer.mailer.fallback
+        subscribe:
+            mailer: swiftmailer.mailer.primary
+        subscribe02:
+            mailer: swiftmailer.mailer.fallback
+    locale:
+        ru: { locale: 'ru', scheme: 'https', host: 'gdeposylka.ru', httpPort: 80, httpsPort: 443 }
+        en: { locale: 'en', scheme: 'https', host: 'packageradar.com', httpPort: 80, httpsPort: 443 }
