@@ -27,6 +27,9 @@ class Message
     protected $vars = [ ];
     protected $locale;
 
+    protected $isBulk = false;
+    protected $unsubscribeUrl = null;
+
     // Rendered fields
     protected $rendered = false;
     protected $subject;
@@ -58,6 +61,8 @@ class Message
     public function setLocale($locale) { $this->locale = $locale; return $this; }
     public function getTemplate() { return $this->tpl . ($this->locale ? '/' . $this->locale : ''); }
     public function setTemplate($tpl) { $this->tpl = $tpl; return $this; }
+    public function setBulk($value) { $this->isBulk = $value; }
+    public function setUnsubscribeUrl($url) { $this->unsubscribeUrl = $url; }
 
     public function getVars()
     {
@@ -174,6 +179,13 @@ class Message
         $message->setFrom($this->getConfig()->getFrom());
         $message->setReplyTo($this->getConfig()->getReplyTo());
         $message->setSubject($this->getSubject());
+        $message->getHeaders()->addTextHeader('List-id', $this->getTemplate());
+        if ($this->isBulk) {
+            $message->getHeaders()->addTextHeader('Precedence', 'bulk');
+        }
+        if ($this->unsubscribeUrl) {
+            $message->getHeaders()->addTextHeader('List-Unsubscribe', $this->unsubscribeUrl);
+        }
         if ($this->getPlainTextBody()) {
             $message->addPart($this->getPlainTextBody(), 'text/plain');
         }
