@@ -1,9 +1,12 @@
 <?php
 namespace RagePHP\RageEmailBundle\EventListener;
 
+use Gedmo\Translatable\TranslatableListener;
 use RagePHP\RageEmailBundle\Event\RenderEvent;
 use Symfony\Component\DependencyInjection\ContainerAwareInterface;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
+use Symfony\Component\Routing\RequestContext;
+use Symfony\Component\Translation\TranslatorInterface;
 
 class EmailListener implements ContainerAwareInterface
 {
@@ -11,6 +14,20 @@ class EmailListener implements ContainerAwareInterface
 
     protected $oldLocaleState = null;
     protected $localeConfig = [ ];
+
+    /* @var RequestContext $requestContext */
+    protected $requestContext;
+    /* @var TranslatorInterface $translator */
+    protected $translator;
+    /* @var TranslatableListener $gedmoTranslatable */
+    protected $gedmoTranslatable;
+
+    public function __construct(RequestContext $requestContext, TranslatorInterface $translator, TranslatableListener $gedmoTranslatable = null)
+    {
+        $this->requestContext = $requestContext;
+        $this->translator = $translator;
+        $this->gedmoTranslatable = $gedmoTranslatable;
+    }
 
     public function setLocaleConfig($config)
     {
@@ -21,11 +38,11 @@ class EmailListener implements ContainerAwareInterface
     {
         $locale = $event->getMessage()->getLocale();
         $this->oldLocaleState = [
-            'locale' => $this->container->get('translator')->getLocale(),
-            'scheme' => $this->container->get('router.request_context')->getScheme(),
-            'host' => $this->container->get('router.request_context')->getHost(),
-            'httpPort' => $this->container->get('router.request_context')->getHttpPort(),
-            'httpsPort' => $this->container->get('router.request_context')->getHttpsPort(),
+            'locale' => $this->translator->getLocale(),
+            'scheme' => $this->requestContext->getScheme(),
+            'host' => $this->requestContext->getHost(),
+            'httpPort' => $this->requestContext->getHttpPort(),
+            'httpsPort' => $this->requestContext->getHttpsPort(),
         ];
         $this->applyConfig($this->localeConfig[$locale]);
     }
@@ -39,10 +56,12 @@ class EmailListener implements ContainerAwareInterface
 
     protected function applyConfig($config)
     {
-        $this->container->get('router.request_context')
+        $this->requestContext
             ->setScheme($config['scheme'])->setHost($config['host'])
             ->setHttpPort($config['httpPort'])->setHttpsPort($config['httpsPort']);
-        $this->container->get('translator')->setLocale($config['locale']);
-        $this->container->get('stof_doctrine_extensions.listener.translatable')->setTranslatableLocale($config['locale']);
+        $this->translator->setLocale($config['locale']);
+        if (!empty($this->gedmoTranslatable)) {
+            $this->gedmoTranslatable->setTranslatableLocale($config['locale']);
+        }
     }
 }

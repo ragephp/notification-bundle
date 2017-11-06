@@ -2,6 +2,7 @@
 namespace RagePHP\RageEmailBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 use Symfony\Component\DependencyInjection\Definition;
@@ -95,6 +96,9 @@ class RageEmailExtension extends Extension
     {
         $container->setParameter('rage_email.locale_config', $config);
         $optionDef = new Definition($container->getParameter('rage_email.locale_listener.class'));
+        $optionDef->addArgument(new Reference('router.request_context'));
+        $optionDef->addArgument(new Reference('translator'));
+        $optionDef->addArgument(new Reference('stof_doctrine_extensions.listener.translatable', ContainerInterface::NULL_ON_INVALID_REFERENCE));
         $optionDef->addMethodCall('setContainer', [ new Reference('service_container') ]);
         $optionDef->addMethodCall('setLocaleConfig', [ $container->getParameter('rage_email.locale_config') ]);
         $optionDef->addTag('kernel.event_listener', [ 'event' => 'rage_email.before_render_html', 'method' => 'onBeforeRenderHTML', 'priority' => 10 ]);
