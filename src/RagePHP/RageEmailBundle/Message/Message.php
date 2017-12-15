@@ -4,7 +4,7 @@ namespace RagePHP\RageEmailBundle\Message;
 use RagePHP\RageEmailBundle\Event\RenderEvent;
 use RagePHP\RageEmailBundle\RageEmailEvent;
 use RagePHP\RageEmailBundle\UserInterface;
-use Rhumsaa\Uuid\Uuid;
+use Ramsey\Uuid\Uuid;
 use Swift_DependencyContainer;
 use Swift_Image;
 use Swift_Message;
