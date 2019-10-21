@@ -67,6 +67,7 @@ class Message
     public function getVars()
     {
         $this->vars['msg_id'] = $this->getId();
+        $this->vars['template'] = $this->getTemplate();
         $this->vars['utm_params'] = 'utm_source=email&utm_medium=transaction&utm_campaign=' . $this->getTemplate();
         return $this->vars;
     }
