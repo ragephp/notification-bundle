@@ -5,6 +5,7 @@ use RagePHP\RageEmailBundle\Event\SendEvent;
 use RagePHP\RageEmailBundle\RageEmailEvent;
 use RagePHP\RageEmailBundle\Swift\SmtpTransport;
 use Swift_Mailer;
+use Swift_RfcComplianceException;
 use Swift_TransportException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
@@ -25,6 +26,7 @@ class Sender
      * @param Message $message
      * @return Sender
      * @throws Swift_TransportException
+     * @throws Swift_RfcComplianceException
      */
     public function send(Message $message)
     {
@@ -41,6 +43,12 @@ class Sender
         return $this;
     }
 
+    /**
+     * @param Swift_Mailer $mailer
+     * @param Message $message
+     * @throws Swift_TransportException
+     * @throws Swift_RfcComplianceException
+     */
     protected function internalSend(Swift_Mailer $mailer, Message $message)
     {
         /** @var SmtpTransport $transport */

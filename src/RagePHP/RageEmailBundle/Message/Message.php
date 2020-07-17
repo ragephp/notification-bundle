@@ -1,6 +1,7 @@
 <?php
 namespace RagePHP\RageEmailBundle\Message;
 
+use Exception;
 use RagePHP\RageEmailBundle\Event\RenderEvent;
 use RagePHP\RageEmailBundle\RageEmailEvent;
 use RagePHP\RageEmailBundle\UserInterface;
@@ -8,6 +9,8 @@ use Ramsey\Uuid\Uuid;
 use Swift_DependencyContainer;
 use Swift_Image;
 use Swift_Message;
+use Swift_RfcComplianceException;
+use Swift_TransportException;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use TijsVerkoyen\CssToInlineStyles\CssToInlineStyles;
 
@@ -38,7 +41,7 @@ class Message
 
     public function __construct()
     {
-        $this->id = Uuid::uuid4();
+        $this->id = Uuid::uuid4()->toString();
     }
 
     public function createForUser(UserInterface $user, $template = null, $vars = null)
@@ -96,7 +99,7 @@ class Message
 
     /**
      * @return Message
-     * @throws \Exception
+     * @throws Exception
      */
     public function render()
     {
@@ -108,7 +111,7 @@ class Message
             $this->eventDispatcher->dispatch(RageEmailEvent::AFTER_RENDER_HTML, new RenderEvent($this));
             $this->rendered = true;
         } else {
-            throw new \Exception('Message is already rendered');
+            throw new Exception('Message is already rendered');
         }
         return $this;
     }
@@ -116,6 +119,8 @@ class Message
     /**
      * @param string $alias
      * @return Message
+     * @throws Swift_RfcComplianceException
+     * @throws Swift_TransportException
      */
     public function send($alias = 'default')
     {
@@ -144,8 +149,8 @@ class Message
         if ($cachedTemplate) {
             if (!file_exists($cachedTemplate)) {
                 $content = $this->getConfig()->getTemplate($template);
-                preg_match('#\{\% extends \"(.+)\" \%\}#', $content, $parentMatch);
-                preg_match('#\{\% block body \%\}(.+)\{\% endblock \%\}#ms', $content, $bodyMatch);
+                preg_match('#{% extends \"(.+)\" %}#', $content, $parentMatch);
+                preg_match('#{% block body %}(.+){% endblock %}#ms', $content, $bodyMatch);
                 if (!empty($parentMatch[1])) {
                     $parentContent = $this->getConfig()->getTemplate($parentMatch[1]);
                     $content = str_replace('{% block body %}{% endblock %}', $bodyMatch[1], $parentContent);
@@ -165,7 +170,7 @@ class Message
     {
         $cssToInlineStyles = new CssToInlineStyles();
         $content = $cssToInlineStyles->convert($body, file_get_contents($this->getConfig()->getCssFile()));
-        $content = preg_replace_callback('#\%7B\%7B\%20(.+?)\%20\%7D\%7D#', function ($match) {
+        $content = preg_replace_callback('#%7B%7B%20(.+?)%20%7D%7D#', function ($match) {
             return urldecode($match[0]);
         }, $content);
         return $content;
